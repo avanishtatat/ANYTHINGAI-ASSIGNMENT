@@ -33,3 +33,23 @@ module.exports.validateLoginBody = (body) => {
 
   return { isValid: true, email: email.trim().toLowerCase(), password };
 }
+
+module.exports.validateTaskParams = (params) => {
+  if (!params.id) {
+    return {isValid: false, message: 'Task id not found'}; 
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    return { isValid: false, message: 'Invalid task ID.' };
+  }
+
+  return { isValid: true, taskId: params.id };
+}
+
+module.exports.validateTaskBody = (body) => {
+  const {title} = body; 
+  if (!title) {
+    return {isValid: false, message: 'Title is required'}; 
+  }
+  return {isValid: true};
+}

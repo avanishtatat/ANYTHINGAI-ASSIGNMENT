@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors"); 
 const connectDB = require('./config/db');
 const authRoutes = require("./routes/authRoutes");
+const roleRoutes = require("./routes/roleRoutes");
+const taskRoutes = require("./routes/taskRoutes");
 
 const PORT = process.env.PORT || 3000;
 const app = express(); 
@@ -18,6 +20,8 @@ app.get("/", (req,res) => {
 })
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/roles", roleRoutes);
+app.use("/api/v1/tasks", taskRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`); 
