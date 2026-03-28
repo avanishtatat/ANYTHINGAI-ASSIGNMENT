@@ -1,8 +1,8 @@
 const mongoose = require("mongoose"); 
 
 const RolePermissionSchema = new mongoose.Schema({
-  roleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Role' },
-  pemissionId : { type: mongoose.Schema.Types.ObjectId, ref: 'Permission'}
+  roleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
+  permissionId : { type: mongoose.Schema.Types.ObjectId, ref: 'Permission', required: true }
 }); 
 
 module.exports = mongoose.model('RolePermission', RolePermissionSchema);

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"); 
 
-const PemissionSchema = new mongoose.Schema({
+const PermissionSchema = new mongoose.Schema({
   name: {type:String, required: true}
 });
 
-module.exports = mongoose.model('Pemission', PemissionSchema); 
+module.exports = mongoose.model('Permission', PermissionSchema); 
