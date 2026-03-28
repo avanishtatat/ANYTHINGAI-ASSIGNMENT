@@ -1,4 +1,3 @@
-const Permission = require("../models/Permission");
 const Role = require("../models/Role");
 const RolePermission = require("../models/RolePermission");
 const User = require("../models/User");
@@ -25,6 +24,11 @@ module.exports.register = async (req, res) => {
       return res.status(400).json({ message: "Email already in use" });
     }
 
+    const role = await Role.findById(roleId);
+    if (!role) {
+      return res.status(400).json({ message: 'Invalid role ID' });
+    }
+
     const newUser = await User.create({ name, email, password });
 
     await UserRole.create({ userId: newUser._id, roleId });
@@ -47,7 +51,7 @@ module.exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     // Check if user exists
     if (!user) {
-      return res.status(400).json({ message: "Invalid Credentails" });
+      return res.status(400).json({ message: "Invalid Credentials" });
     }
 
     const isMatch = user.comparePassword(password);
@@ -70,16 +74,20 @@ module.exports.getUserInfo = async (req, res) => {
 
     const userRole = await UserRole.findOne({ userId }).populate("roleId"); 
 
-    const permissions = await RolePermission.find({ roleId: userRole.roleId }).populate('permissionId');
+    if (!userRole || !userRole.roleId) {
+      return res.status(404).json({ message: "User role not found" });
+    }
+
+    const permissions = await RolePermission.find({ roleId: userRole.roleId._id }).populate('permissionId');
 
     return res
       .status(200)
       .json({
         user: req.user,
         role: userRole.roleId.name,
-        permissions: permissions.map((perm) => perm.permissionId.name),
+        permissions: permissions.filter((perm) => perm.permissionId).map((perm) => perm.permissionId.name),
       });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', err: error.message }); 
+    res.status(500).json({ message: 'Server Error' }); 
   }
 };
