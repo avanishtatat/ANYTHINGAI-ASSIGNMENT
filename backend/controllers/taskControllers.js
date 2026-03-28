@@ -1,4 +1,3 @@
-const { json } = require("express");
 const Task = require("../models/Task");
 const { hasPermission } = require("../utils/authorize");
 const { VIEW_TASK, CREATE_TASK, UPDATE_TASK, DELETE_TASK } = require("../utils/constants");
@@ -31,6 +30,9 @@ module.exports.getTask = async (req, res) => {
     }
 
     const task = await Task.findById(validationResponse.taskId);
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
     return res.status(200).json(task);
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
@@ -49,7 +51,7 @@ module.exports.createTask = async (req, res) => {
       return res.status(400).json({ message: validationResult.message });
     }
 
-    const { title, description = "" } = req.body;
+    const { title, description = "" } = validationResult;
 
     const newTask = await Task.create({ title, description, userId: req.user._id });
 
@@ -73,9 +75,22 @@ module.exports.updateTask = async (req, res) => {
       return res.status(400).json({ message: validationResponse.message });
     }
 
+    const allowedFields = ["title", "description"];
+    const safeUpdate = Object.fromEntries(
+      Object.entries(req.body || {}).filter(([key]) => allowedFields.includes(key))
+    );
+
+    if (Object.keys(safeUpdate).length === 0) {
+      return res.status(400).json({ message: "No valid fields provided for update" });
+    }
+
     const updatedTask = await Task.findByIdAndUpdate(validationResponse.taskId, {
-      $set: req.body
+      $set: safeUpdate
     }, { new: true, runValidators: true })
+
+    if (!updatedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
 
     return res.status(200).json({
       message: "Task updated successfully",
@@ -98,7 +113,10 @@ module.exports.deleteTask = async (req, res) => {
       return res.status(400).json({ message: validationResponse.message });
     }
 
-    await Task.findByIdAndDelete(validationResponse.taskId);
+    const deletedTask = await Task.findByIdAndDelete(validationResponse.taskId);
+    if (!deletedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
 
     return res.status(200).json({ message: "Task deleted successfully" })
   } catch (error) {

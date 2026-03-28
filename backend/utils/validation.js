@@ -47,9 +47,9 @@ module.exports.validateTaskParams = (params) => {
 }
 
 module.exports.validateTaskBody = (body) => {
-  const {title} = body; 
+  const {title, description = ""} = body; 
   if (!title) {
     return {isValid: false, message: 'Title is required'}; 
   }
-  return {isValid: true};
+  return { isValid: true, title: title.trim(), description: description.trim() };
 }

@@ -1,5 +1,6 @@
 const RolePermission = require("../models/RolePermission");
 const UserRole = require("../models/UserRole")
+// Required for populate('permissionId') to resolve the Permission model
 require("../models/Permission");
 
 module.exports.hasPermission = async (userId, permission) => {
