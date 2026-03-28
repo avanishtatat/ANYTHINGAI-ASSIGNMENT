@@ -1,5 +1,5 @@
 const RolePermission = require("../models/RolePermission");
-const UserRole = require("../models/UserRole")
+const UserRole = require("../models/UserRole");
 // Required for populate('permissionId') to resolve the Permission model
 require("../models/Permission");
 
