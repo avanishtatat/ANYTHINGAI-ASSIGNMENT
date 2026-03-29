@@ -53,7 +53,7 @@ const Login = () => {
                 Email Address
               </label>
               <input
-                type="text"
+                type="email"
                 name="email"
                 id="email"
                 placeholder="john.doe@example.com"
@@ -61,7 +61,7 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-              />
+              />{" "}
             </div>
 
             <div className="flex flex-col gap-1">

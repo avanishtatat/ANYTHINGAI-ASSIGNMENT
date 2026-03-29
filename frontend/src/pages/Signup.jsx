@@ -92,7 +92,7 @@ const Signup = () => {
                 Email Address
               </label>
               <input
-                type="text"
+                type="email"
                 name="email"
                 id="email"
                 placeholder="john.doe@example.com"
