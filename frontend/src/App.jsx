@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import PublicRoute from "./components/PublicRoute";
 import PrivateRoute from "./components/PrivateRoute";
-import UserProvider from "./context/userContext";
+import UserProvider from "./context/UserContext";
 
 const App = () => {
   return (

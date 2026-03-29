@@ -33,9 +33,12 @@ const Login = () => {
     }
 
     toast.success(response.message);
-    if (response?.token) {
-      localStorage.setItem("token", response.token)
+    if (!response?.token) {
+      toast.error("Authentication failed: No token received");
+      setLoading(false); 
+      return;
     }
+    localStorage.setItem("token", response.token)
     navigate("/");
     setLoading(false);
   };

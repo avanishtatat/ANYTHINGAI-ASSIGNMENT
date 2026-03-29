@@ -1,4 +1,3 @@
 export const hasPermission = (userPermissions, permission) => {
-  if (!userPermissions.includes(permission)) return false;
-  return true;
+  return Array.isArray(userPermissions) && userPermissions.includes(permission);
 }

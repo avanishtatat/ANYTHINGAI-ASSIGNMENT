@@ -26,7 +26,7 @@ const useFetch = (apiFunc) => {
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, [apiFunc])
 
   return { loading, error, data, refetch: fetchData }
 }

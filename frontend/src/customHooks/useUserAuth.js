@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
-import { UserContext } from "../context/userContext";
+import { UserContext } from "../context/UserContext";
 import { getUserInfo } from "../api/authApi";
 
 export const useUserAuth = () => {
@@ -16,15 +16,13 @@ export const useUserAuth = () => {
 
         if (isMounted && response.success) {
           updateUser(response.data);
-        } else {
+        } else if (isMounted) {
           logout();
-          navigate("/login");
         }
       } catch (error) {
         console.error("Failed to fetch user info:", error)
         if (isMounted) {
           logout();
-          navigate("/login");
         }
       }
     }

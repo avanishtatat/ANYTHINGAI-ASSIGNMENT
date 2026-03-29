@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useUserAuth } from "../customHooks/useUserAuth";
-import { UserContext } from "../context/userContext";
+import { UserContext } from "../context/UserContext";
 import Navbar from "../components/Navbar";
 import CreateEditModal from "../components/CreateEditModal";
 import useFetch from "../customHooks/useFetch";
@@ -18,6 +18,23 @@ const Home = () => {
   const [selectedTask, setSelectedTask] = useState(null);
 
   const { loading, error, data, refetch } = useFetch(getTasks);
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <p className="text-center mt-8">Loading tasks...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <Navbar />
+        <p className="text-center mt-8 text-red-500">Failed to load tasks.</p>
+      </div>
+    );
+  }
 
   const openCreateModal = () => {
     setSelectedTask(null);
@@ -35,33 +52,41 @@ const Home = () => {
   };
 
   const handleSubmitTask = async (payload) => {
-    let response;
-    if (selectedTask) {
-      response = await updateTask(selectedTask._id, payload);
-    } else {
-      response = await createTask(payload);
-    }
+    try {
+      let response;
+      if (selectedTask) {
+        response = await updateTask(selectedTask._id, payload);
+      } else {
+        response = await createTask(payload);
+      }
 
-    if (!response.success) {
-      toast.error(response.message);
-      return;
-    }
+      if (!response.success) {
+        toast.error(response.message);
+        return;
+      }
 
-    toast.success(
-      response?.data?.message ?? "Operation successfully performed.",
-    );
-    await refetch();
-    closeModal();
+      toast.success(
+        response?.data?.message ?? "Operation successfully performed.",
+      );
+      await refetch();
+      closeModal();
+    } catch (error) {
+      toast.error("An unexpected error occurred.");
+    }
   };
 
   const handleDeleteTask = async (taskId) => {
-    const response = await deleteTask(taskId);
+    try {
+      const response = await deleteTask(taskId);
 
-    if (response.success) {
-      toast.success(response.data.message);
-      await refetch();
-    } else {
-      toast.error(response.message);
+      if (response.success) {
+        toast.success(response.data.message);
+        await refetch();
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error("Failed to delete task.");
     }
   };
 

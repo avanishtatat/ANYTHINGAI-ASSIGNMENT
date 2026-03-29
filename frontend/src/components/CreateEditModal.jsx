@@ -29,7 +29,6 @@ const CreateEditModal = ({ isOpen, onClose, task, onSubmit }) => {
 
     if (onSubmit) {
       onSubmit({
-        ...formData,
         title: formData.title.trim(),
         description: formData.description.trim(),
       });
