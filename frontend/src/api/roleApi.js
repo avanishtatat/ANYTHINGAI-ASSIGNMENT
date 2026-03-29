@@ -8,9 +8,11 @@ const client = axios.create({
 })
 
 export const getUserRoles = async () => {
-  const response = await client.get("/api/v1/roles");
+  try {
+    const response = await client.get("/api/v1/roles");
 
-  const { roles } = response.data;
-
-  return roles;
+    return { success: true, data: response.data }
+  } catch (error) {
+    return { success: false, message: error?.response?.data?.message ? error.response.data.message : "Internal server error" }
+  }
 }

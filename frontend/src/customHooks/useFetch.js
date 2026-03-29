@@ -10,7 +10,12 @@ const useFetch = (apiFunc) => {
     setError(null);
     try {
       const response = await apiFunc();
-      setData(response);
+      if (!response?.success) {
+        setError(response?.message ? response.message : "Internal server error");
+        setData(undefined);
+        return;
+      }
+      setData(response.data);
       setError(null)
     } catch (error) {
       setError(error?.message ? error.message : "Internal server error")
@@ -23,7 +28,7 @@ const useFetch = (apiFunc) => {
     fetchData();
   }, [])
 
-  return { loading, error, data }
+  return { loading, error, data, refetch: fetchData }
 }
 
 export default useFetch;

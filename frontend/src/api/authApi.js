@@ -26,3 +26,23 @@ export const loginUser = async (payload) => {
     return { success: false, message: error?.response?.data?.message ? error.response.data.message : "Internal server error" }
   }
 }
+
+export const getUserInfo = async () => {
+  const token = localStorage.getItem("token") || "";
+
+  if (!token) {
+    return { success: false, message: "Please login again" }
+  }
+
+  try {
+    const response = await client.get("/api/v1/auth/getUser", {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    return { success: true, data: response.data }
+  } catch (error) {
+    return { success: false, message: error?.response?.data?.message ? error.response.data.message : "Internal server error" }
+  }
+}

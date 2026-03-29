@@ -6,7 +6,7 @@ import { registerUser } from "../api/authApi";
 import { useState } from "react";
 
 const Signup = () => {
-  const { loading: roleLoading, error: roleError, data: roles } = useFetch(getUserRoles);
+  const { loading: roleLoading, error: roleError, data } = useFetch(getUserRoles);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -119,9 +119,9 @@ const Signup = () => {
                 value={formData.roleId}
               >
                 <option value="">Select your role</option>
-                {roles &&
-                  roles.length > 0 &&
-                  roles.map((role) => (
+                {data?.roles &&
+                  data?.roles.length > 0 &&
+                  data.roles.map((role) => (
                     <option
                       key={role._id}
                       className="capitalize"

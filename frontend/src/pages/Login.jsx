@@ -33,6 +33,9 @@ const Login = () => {
     }
 
     toast.success(response.message);
+    if (response?.token) {
+      localStorage.setItem("token", response.token)
+    }
     navigate("/");
     setLoading(false);
   };
