@@ -78,10 +78,10 @@ http://localhost:3000/api/v1
 - Authenticated identity is extracted from `Authorization: Bearer <token>`.
 - Role is stored via `UserRole` mapping, and permissions via `RolePermission` mapping.
 - Task controller operations are guarded by permission constants:
-	- `VIEW_TASK`
-	- `CREATE_TASK`
-	- `UPDATE_TASK`
-	- `DELETE_TASK`
+  - `VIEW_TASK`
+  - `CREATE_TASK`
+  - `UPDATE_TASK`
+  - `DELETE_TASK`
 - Unauthorized access returns `401` (auth failure) or `403` (permission denied).
 
 ## Role and Permission Model
